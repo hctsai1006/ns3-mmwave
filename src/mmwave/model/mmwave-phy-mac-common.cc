@@ -46,13 +46,18 @@ MmWavePhyMacCommon::GetTypeId(void)
             .AddConstructor<MmWavePhyMacCommon>()
             .AddAttribute(
                 "Numerology",
-                "The PHY layer numerology",
+                "The PHY layer numerology, according to 3GPP TS 38.211.",
                 EnumValue<Numerology>(NrNumerology2),
                 MakeEnumAccessor<Numerology>(&MmWavePhyMacCommon::SetNumerology),
-                MakeEnumChecker(NrNumerology2, "NrNumerology2", NrNumerology3, "NrNumerology3"))
+                MakeEnumChecker(NrNumerology0,
+                                "NrNumerology0",
+                                NrNumerology2,
+                                "NrNumerology2",
+                                NrNumerology3,
+                                "NrNumerology3"))
             .AddAttribute("Bandwidth",
                           "The carrier bandwidth in Hz",
-                          DoubleValue(200e6),
+                          DoubleValue(100e6),
                           MakeDoubleAccessor(&MmWavePhyMacCommon::SetBandwidth),
                           MakeDoubleChecker<double>())
             .AddAttribute("CenterFreq",
@@ -68,12 +73,12 @@ MmWavePhyMacCommon::GetTypeId(void)
                           MakeUintegerChecker<uint32_t>())
             .AddAttribute("NumHarqProcess",
                           "Number of concurrent stop-and-wait Hybrid ARQ processes per user",
-                          UintegerValue(20),
+                          UintegerValue(8),
                           MakeUintegerAccessor(&MmWavePhyMacCommon::m_numHarqProcess),
                           MakeUintegerChecker<uint8_t>())
             .AddAttribute("HarqDlTimeout",
                           "Hybrid ARQ timeout period",
-                          UintegerValue(20),
+                          UintegerValue(5),
                           MakeUintegerAccessor(&MmWavePhyMacCommon::m_harqTimeout),
                           MakeUintegerChecker<uint8_t>())
             .AddAttribute("TbDecodeLatency",
@@ -104,24 +109,32 @@ MmWavePhyMacCommon::SetNumerology(Numerology num)
 {
     NS_LOG_FUNCTION(this << num);
 
-    if (num == Numerology::NrNumerology2)
+    if (num == Numerology::NrNumerology0)
+        SetNrNumerology(0);
+    else if (num == Numerology::NrNumerology2)
         SetNrNumerology(2);
     else if (num == Numerology::NrNumerology3)
         SetNrNumerology(3);
     else
-        NS_FATAL_ERROR("Currently, only numerologies 2 and 3 are supported!");
+        NS_FATAL_ERROR("Currently, only numerologies 0, 2 and 3 are supported!");
 }
 
 void
 MmWavePhyMacCommon::SetNrNumerology(uint8_t index)
 {
     NS_LOG_FUNCTION(this << index);
-    NS_ASSERT_MSG((index == 2) || (index == 3),
-                  "Numerology index is not valid."); // Only 2 and 3 are supported in NR for FR2.
+    NS_ASSERT_MSG((index == 0) || (index == 2) || (index == 3),
+                  "Numerology index is not valid."); // Only 0, 2 and 3 are supported in NR for FR2.
 
-    double subcarrierSpacing =
-        15 * std::pow(2, index) *
-        1000; // Subcarrier spacing, only 60KHz and 120KHz are supported in NR for FR2.
+    double subcarrierSpacing;
+    if (index == 0)
+    {
+        subcarrierSpacing = 15 * 1000;
+    }
+    else
+    {
+        subcarrierSpacing = 15 * std::pow(2, index) * 1000;
+    }
 
     m_symbolsPerSlot = 14; // TS 38.211 Sec 4.3.2: each slot must have 14 symbols
     m_slotsPerSubframe =
@@ -140,8 +153,7 @@ MmWavePhyMacCommon::SetBandwidth(double bw)
 {
     NS_LOG_FUNCTION(this << bw);
 
-    m_numRbs =
-        std::ceil(bw / m_rbWidth); // The amount of RBs is fixed to 1 as only TDMA is supported
+    m_numRbs = (uint32_t)std::ceil(bw / m_rbWidth);
     m_numRefSc = REF_SUBCARRIERS_PER_RB * m_numRbs;
 }
 

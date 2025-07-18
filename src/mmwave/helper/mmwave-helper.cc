@@ -2445,6 +2445,25 @@ MmWaveHelper::InstallSingleLteEnbDevice(Ptr<Node> n)
     return dev;
 }
 
+NetDeviceContainer
+MmWaveHelper::InstallIabDevice(const NodeContainer& iabNodes)
+{
+    NetDeviceContainer iabDevs;
+
+    for (NodeContainer::Iterator i = iabNodes.begin(); i != iabNodes.end(); ++i)
+    {
+        Ptr<Node> node = *i;
+        Ptr<MmWaveEnbNetDevice> iabNetDevice = CreateObject<MmWaveEnbNetDevice>();
+        iabNetDevice->SetPhy(CreateObject<MmWaveEnbPhy>());
+        iabNetDevice->SetMac(CreateObject<MmWaveEnbMac>());
+        iabNetDevice->SetRrc(CreateObject<MmWaveEnbRrc>());
+        node->AddDevice(iabNetDevice);
+        iabDevs.Add(iabNetDevice);
+    }
+
+    return iabDevs;
+}
+
 // only for mmWave-only devices
 void
 MmWaveHelper::AttachToClosestEnb(NetDeviceContainer ueDevices, NetDeviceContainer enbDevices)

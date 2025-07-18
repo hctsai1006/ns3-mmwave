@@ -48,10 +48,11 @@ class ChannelCondition : public Object
      */
     enum LosConditionValue
     {
-        LOS,   //!< Line of Sight
-        NLOS,  //!< Non Line of Sight
-        NLOSv, //!< Non Line of Sight due to a vehicle
-        LC_ND  //!< Los condition not defined
+        LOS,    //!< Line of Sight
+        NLOS,   //!< Non Line of Sight
+        NLOS_2, //!< Non Line of Sight for NTN
+        NLOSv,  //!< Non Line of Sight due to a vehicle
+        LC_ND   //!< Los condition not defined
     };
 
     /**

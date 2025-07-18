@@ -130,6 +130,15 @@ class ThreeGppPropagationLossModel : public PropagationLossModel
     virtual double GetLossNlos(Ptr<MobilityModel> a, Ptr<MobilityModel> b) const = 0;
 
     /**
+     * \brief Computes the pathloss between a and b considering that the line of
+     *        sight is obstructed for NTN scenarios
+     * \param a tx mobility model
+     * \param b rx mobility model
+     * \return pathloss value in dB
+     */
+    virtual double GetLossNlos2(Ptr<MobilityModel> a, Ptr<MobilityModel> b) const;
+
+    /**
      * \brief Returns the minimum of the two independently generated distances
      *        according to the uniform distribution between the minimum and the maximum
      *        value depending on the specific 3GPP scenario (UMa, UMi-Street Canyon, RMa),
@@ -384,6 +393,15 @@ class ThreeGppRmaPropagationLossModel : public ThreeGppPropagationLossModel
     double GetLossNlos(Ptr<MobilityModel> a, Ptr<MobilityModel> b) const override;
 
     /**
+     * \brief Computes the pathloss between a and b considering that the line of
+     *        sight is obstructed for NTN scenarios
+     * \param a tx mobility model
+     * \param b rx mobility model
+     * \return pathloss value in dB
+     */
+    double GetLossNlos2(Ptr<MobilityModel> a, Ptr<MobilityModel> b) const override;
+
+    /**
      * \brief Returns the shadow fading standard deviation
      * \param a tx mobility model
      * \param b rx mobility model
@@ -487,6 +505,15 @@ class ThreeGppUmaPropagationLossModel : public ThreeGppPropagationLossModel
      * \return pathloss value in dB
      */
     double GetLossNlos(Ptr<MobilityModel> a, Ptr<MobilityModel> b) const override;
+
+    /**
+     * \brief Computes the pathloss between a and b considering that the line of
+     *        sight is obstructed for NTN scenarios
+     * \param a tx mobility model
+     * \param b rx mobility model
+     * \return pathloss value in dB
+     */
+    double GetLossNlos2(Ptr<MobilityModel> a, Ptr<MobilityModel> b) const override;
 
     /**
      * \brief Returns the shadow fading standard deviation

@@ -108,6 +108,7 @@ class MmWaveHelper : public Object
     NetDeviceContainer InstallInterRatHoCapableUeDevice(NodeContainer c);
     NetDeviceContainer InstallEnbDevice(NodeContainer c);
     NetDeviceContainer InstallLteEnbDevice(NodeContainer c);
+    NetDeviceContainer InstallIabDevice(const NodeContainer& iabNodes);
     void SetChannelConditionModelType(std::string type);
     void SetPathlossModelType(std::string type);
     void SetChannelModelType(std::string type);

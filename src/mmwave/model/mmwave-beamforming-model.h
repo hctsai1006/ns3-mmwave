@@ -51,6 +51,20 @@ class MmWaveBeamformingModel : public Object
 {
   public:
     /**
+     * The possible values for the beamforming mode.
+     */
+    enum BeamformingModeValue
+    {
+        BF_MODE_1, //!< SISO
+        BF_MODE_2, //!< MIMO with TX diversity
+        BF_MODE_3, //!< MIMO with open loop spatial multiplexing
+        BF_MODE_4, //!< MIMO with closed loop spatial multiplexing
+        BF_MODE_5, //!< MIMO with MU-MIMO
+        BF_MODE_6, //!< MIMO with rank-1 precoding
+        BF_MODE_7  //!< MIMO with beamforming
+    };
+
+    /**
      * Constructor
      */
     MmWaveBeamformingModel();

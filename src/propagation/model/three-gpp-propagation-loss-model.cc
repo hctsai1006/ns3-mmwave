@@ -442,6 +442,7 @@ ThreeGppPropagationLossModel::GetLoss(Ptr<ChannelCondition> cond,
         loss = GetLossNlosv(a, b);
         break;
     case ChannelCondition::LosConditionValue::NLOS:
+    case ChannelCondition::LosConditionValue::NLOS_2:
         loss = GetLossNlos(a, b);
         break;
     default:
@@ -449,6 +450,22 @@ ThreeGppPropagationLossModel::GetLoss(Ptr<ChannelCondition> cond,
     }
 
     return loss;
+}
+
+double
+ThreeGppUmaPropagationLossModel::GetLossNlos2(Ptr<MobilityModel> a, Ptr<MobilityModel> b) const
+{
+    NS_LOG_FUNCTION(this);
+    NS_FATAL_ERROR("This method should not be called for the UMa propagation loss model");
+    return 0;
+}
+
+double
+ThreeGppPropagationLossModel::GetLossNlos2(Ptr<MobilityModel> a, Ptr<MobilityModel> b) const
+{
+    NS_LOG_FUNCTION(this);
+    NS_FATAL_ERROR("This method should not be called for the selected propagation loss model");
+    return 0;
 }
 
 double
@@ -670,7 +687,14 @@ ThreeGppPropagationLossModel::GetShadowing(Ptr<MobilityModel> a,
     it->second.m_shadowing = shadowingValue;
     it->second.m_distance = newDistance; // Save the (0,0,0) vector in case it's the first time we
                                          // are calculating this value
-    it->second.m_condition = cond;
+    if (cond != ChannelCondition::LosConditionValue::NLOS_2)
+    {
+        it->second.m_condition = cond;
+    }
+    else
+    {
+        it->second.m_condition = ChannelCondition::LosConditionValue::NLOS;
+    }
 
     return shadowingValue;
 }
@@ -875,7 +899,7 @@ ThreeGppRmaPropagationLossModel::GetLossNlos(Ptr<MobilityModel> a, Ptr<MobilityM
     // compute the pathloss between two BSs or UTs, e.g., to evaluate the
     // interference. In order to apply the model, we need to retrieve the values of
     // hBS and hUT, but in these cases one of the two falls outside the validity
-    // range and the warning message is printed (hBS for the UT-UT case and hUT
+    _range and the warning message is printed (hBS for the UT-UT case and hUT
     // for the BS-BS case).
 
     // check if the distance is outside the validity range
@@ -897,6 +921,15 @@ ThreeGppRmaPropagationLossModel::GetLossNlos(Ptr<MobilityModel> a, Ptr<MobilityM
     NS_LOG_DEBUG("Loss " << loss);
 
     return loss;
+}
+
+double
+ThreeGppUmiStreetCanyonPropagationLossModel::GetLossNlos2(Ptr<MobilityModel> a,
+                                                          Ptr<MobilityModel> b) const
+{
+    NS_LOG_FUNCTION(this);
+    NS_FATAL_ERROR("This method should not be called for the UMi Street Canyon propagation loss model");
+    return 0;
 }
 
 double

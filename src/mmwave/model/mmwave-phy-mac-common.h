@@ -419,10 +419,11 @@ class MmWavePhyMacCommon : public Object
         1}; //!< The amount of reference subcarriers per Resource Block. TODO: check in the TS
 
     /**
-     * Represents the PHY layer numerology configuration
+     * Represents the PHY layer numerology configuration, according to 3GPP TS 38.211
      */
     enum Numerology
     {
+        NrNumerology0 = 0, //!< NR numerology index 0
         NrNumerology2 = 2, //!< NR numerology index 2
         NrNumerology3 = 3  //!< NR numerology index 3
     };

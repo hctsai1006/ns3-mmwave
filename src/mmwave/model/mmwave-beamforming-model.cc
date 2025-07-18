@@ -54,20 +54,39 @@ NS_OBJECT_ENSURE_REGISTERED(MmWaveBeamformingModel);
 TypeId
 MmWaveBeamformingModel::GetTypeId()
 {
-    static TypeId tid = TypeId("ns3::MmWaveBeamformingModel")
-                            .SetParent<Object>()
-                            .AddAttribute("Device",
-                                          "The current NetDevice",
-                                          PointerValue(0),
-                                          MakePointerAccessor(&MmWaveBeamformingModel::SetDevice,
-                                                              &MmWaveBeamformingModel::GetDevice),
-                                          MakePointerChecker<NetDevice>())
-                            .AddAttribute("Antenna",
-                                          "The antenna of the Device to configure",
-                                          PointerValue(0),
-                                          MakePointerAccessor(&MmWaveBeamformingModel::SetAntenna,
-                                                              &MmWaveBeamformingModel::GetAntenna),
-                                          MakePointerChecker<PhasedArrayModel>());
+    static TypeId tid =
+        TypeId("ns3::MmWaveBeamformingModel")
+            .SetParent<Object>()
+            .AddAttribute("Device",
+                          "The current NetDevice",
+                          PointerValue(0),
+                          MakePointerAccessor(&MmWaveBeamformingModel::SetDevice,
+                                              &MmWaveBeamformingModel::GetDevice),
+                          MakePointerChecker<NetDevice>())
+            .AddAttribute("Antenna",
+                          "The antenna of the Device to configure",
+                          PointerValue(0),
+                          MakePointerAccessor(&MmWaveBeamformingModel::SetAntenna,
+                                              &MmWaveBeamformingModel::GetAntenna),
+                          MakePointerChecker<PhasedArrayModel>())
+            .AddAttribute("BeamformingMode",
+                          "The beamforming mode.",
+                          EnumValue(BF_MODE_7),
+                          MakeEnumAccessor(&MmWaveBeamformingModel::m_beamformingMode),
+                          MakeEnumChecker(BF_MODE_1,
+                                          "SISO",
+                                          BF_MODE_2,
+                                          "MIMO with TX diversity",
+                                          BF_MODE_3,
+                                          "MIMO with open loop spatial multiplexing",
+                                          BF_MODE_4,
+                                          "MIMO with closed loop spatial multiplexing",
+                                          BF_MODE_5,
+                                          "MIMO with MU-MIMO",
+                                          BF_MODE_6,
+                                          "MIMO with rank-1 precoding",
+                                          BF_MODE_7,
+                                          "MIMO with beamforming"));
     return tid;
 }
 
